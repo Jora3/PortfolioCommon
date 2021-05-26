@@ -11,7 +11,7 @@ namespace PortfolioCommon.Data.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer(@"");
+            options.UseSqlServer(@"Data Source=PC-LV-RAJONIAIN\SQLEXPRESS;Initial Catalog=Portfolio;User ID=sa;Password=Bocasay2018;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
 
         public DbSet<Client> Clients { get; set; }
