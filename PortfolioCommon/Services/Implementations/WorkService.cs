@@ -9,7 +9,7 @@ using System.IO;
 
 namespace PortfolioCommon.Services.Implementations
 {
-    public class WorkService : FileService, IWorkService
+    public class WorkService : IWorkService
     {
         private readonly IWorkItemRepository _workItemRepository;
         private readonly IWorkTypeRepository _workTypeRepository;
@@ -21,6 +21,11 @@ namespace PortfolioCommon.Services.Implementations
         }
 
         #region PUBLIC METHOD
+        public WorkItem GetItemByProjectName(string projectName)
+        {
+            return _workItemRepository.ReadOne(w => w.ProjectName.ToLower().Equals(projectName.ToLower()));
+        }
+
         public void UpdateItem(int id, int typeId, string projectName, string projectDescription, IFormFile formFile, string imageRootPath, string imageRootUrl)
         {
             CheckProjectName(projectName);
@@ -37,6 +42,11 @@ namespace PortfolioCommon.Services.Implementations
                         if (File.Exists(oldPhotoPath))
                             File.Delete(oldPhotoPath);
                     }
+                }
+                if (!work.ProjectName.ToLower().Equals(projectName))
+                {
+                    if (GetItemByProjectName(projectName) != null)
+                        throw new Exception("Le nom de projet renseigné est déjà pris.");
                 }
                 var type = CheckType(typeId);
                 work.WorkType = type;
@@ -132,7 +142,7 @@ namespace PortfolioCommon.Services.Implementations
         {
             if (photo == null || photo.Length <= 0)
                 throw new Exception("La photo représentant le projet est vide ou n'a pas été renseignée.");
-            return SavePhoto(photo, imageRootPath, imageRootUrl);
+            return ImageHelper.SavePhoto(photo, imageRootPath, imageRootUrl);
         }
 
         public void AddItem(int typeId, string projectName, string projectDescription, string pathPhoto)

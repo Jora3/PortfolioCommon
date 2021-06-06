@@ -6,6 +6,7 @@ namespace PortfolioCommon.Services.Interfaces
 {
     public interface IWorkService
     {
+        WorkItem GetItemByProjectName(string projectName);
         void UpdateItem(int id, int typeId, string projectName, string projectDescription, IFormFile formFile, string imageRootPath, string imageRootUrl);
         WorkItem GetItem(int id);
         void Remove(int id);
