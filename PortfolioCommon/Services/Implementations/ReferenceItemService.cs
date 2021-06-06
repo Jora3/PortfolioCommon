@@ -9,7 +9,7 @@ using System.IO;
 
 namespace PortfolioCommon.Services.Implementations
 {
-    public class ReferenceItemService : IReferenceItemService
+    public class ReferenceItemService : FileService, IReferenceItemService
     {
         private readonly IReferenceItemRepository _referenceItemRepository;
 
@@ -45,12 +45,7 @@ namespace PortfolioCommon.Services.Implementations
         {
             if (formFile == null || formFile.Length <= 0)
                 return null;
-            ImageHelper.CheckIfPhotoIsValidImage(formFile.FileName);
-            string referencerPhoto = $"{imageRootUrl}{formFile.FileName}",
-                physicalPhoto = Path.Combine(imageRootPath, formFile.FileName);
-            using var stream = new FileStream(physicalPhoto, FileMode.Create);
-            formFile.OpenReadStream().CopyTo(stream);
-            return referencerPhoto;
+            return SavePhoto(formFile, imageRootPath, imageRootUrl);
         }
 
         public void Update(int id, string text, string referencerName, string referencerFunction, IFormFile formFile, string imageRootPath, string imageRootUrl)

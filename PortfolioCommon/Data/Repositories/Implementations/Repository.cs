@@ -25,7 +25,7 @@ namespace PortfolioCommon.Data.Repositories.Implementations
             return entity.Id;
         }
 
-        public void Delete(int id)
+        public virtual void Delete(int id)
         {
             var entity = ReadOne(id);
             if (entity == null) return;
@@ -34,20 +34,20 @@ namespace PortfolioCommon.Data.Repositories.Implementations
             _portfolioContext.SaveChanges();
         }
 
-        public void DeleteMany(Func<T, bool> conditions)
+        public virtual void DeleteMany(Func<T, bool> conditions)
         {
             _portfolioContext.Set<T>()
                 .RemoveRange(ReadMany(conditions));
             _portfolioContext.SaveChanges();
         }
 
-        public IList<T> ReadAll()
+        public virtual IList<T> ReadAll()
         {
             return _portfolioContext.Set<T>()
                 .ToList();
         }
 
-        public IList<T> ReadMany(Func<T, bool> conditions)
+        public virtual IList<T> ReadMany(Func<T, bool> conditions)
         {
             if (conditions == null)
                 return ReadAll();
@@ -56,13 +56,13 @@ namespace PortfolioCommon.Data.Repositories.Implementations
                 .ToList();
         }
 
-        public T ReadOne(int id)
+        public virtual T ReadOne(int id)
         {
             return _portfolioContext.Set<T>()
                 .Find(id);
         }
 
-        public T ReadOne(Func<T, bool> conditions)
+        public virtual T ReadOne(Func<T, bool> conditions)
         {
             if (conditions == null)
                 return ReadAll().FirstOrDefault();
@@ -70,7 +70,7 @@ namespace PortfolioCommon.Data.Repositories.Implementations
                 .FirstOrDefault(conditions);
         }
 
-        public void Update(T entity)
+        public virtual void Update(T entity)
         {
             if (entity == null) throw new Exception("L'entité est nulle.");
             _portfolioContext.Set<T>()
